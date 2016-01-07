@@ -1,133 +1,97 @@
-<?php
-    //loome AB ¸henduse
-		require_once("../config.php");
-		$database = "if15_raiklep";
-		$mysqli = new mysqli($servername, $username, $password, $database);
-    //check connection
-    if($mysqli->connect_error) {
-        die("connect error ".mysqli_connect_error());
+Ôªø<?php
+    require_once("functions.php");
+    
+    //kui kasutaja on sisse logitud, suuna teisele lehele
+    //kontrollin kas sessiooni muutuja olemas
+    if(isset($_SESSION['logged_in_user_id'])){
+        header("Location: data.php");
     }
   // muuutujad errorite jaoks
-		$email_error = "";
-		$password_error = "";
-		$create_email_error = "";
-		$create_password_error = "";
-  // muutujad v‰‰rtuste jaoks
-		$email = "";
-		$password = "";
-		$create_email = "";
-		$create_password = "";
-		$age = 0;
-		$gender = '';
+	$email_error = "";
+	$password_error = "";
+	$create_email_error = "";
+	$create_password_error = "";
+  // muutujad v√§√§rtuste jaoks
+	$email = "";
+	$password = "";
+	$create_email = "";
+	$create_password = "";
 	if($_SERVER["REQUEST_METHOD"] == "POST") {
-			// *********************
-			// **** LOGI SISSE *****
-			// *********************
+    // *********************
+    // **** LOGI SISSE *****
+    // *********************
 		if(isset($_POST["login"])){
 			if ( empty($_POST["email"]) ) {
-				$email_error = "See v‰li on kohustuslik";
+				$email_error = "See v√§li on kohustuslik";
 			}else{
-        // puhastame muutuja vıimalikest ¸leliigsetest s¸mbolitest
+        // puhastame muutuja v√µimalikest √ºleliigsetest s√ºmbolitest
 				$email = cleanInput($_POST["email"]);
 			}
 			if ( empty($_POST["password"]) ) {
-				$password_error = "See v‰li on kohustuslik";
+				$password_error = "See v√§li on kohustuslik";
 			}else{
 				$password = cleanInput($_POST["password"]);
 			}
-      // Kui oleme siia jıudnud, vıime kasutaja sisse logida
+      // Kui oleme siia j√µudnud, v√µime kasutaja sisse logida
 			if($password_error == "" && $email_error == ""){
-				echo "Vıib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
+				echo "V√µib sisse logida! Kasutajanimi on ".$email." ja parool on ".$password;
 			
                 $hash = hash("sha512", $password);
                 
-                $stmt = $mysqli->prepare("SELECT id, email FROM user_sample WHERE email=? AND password=?");
-                // k¸sim‰rkide asendus
-                $stmt->bind_param("ss", $email, $hash);
-                //ab tulnud muutujad
-                $stmt->bind_result($id_from_db, $email_from_db);
-                $stmt->execute();
-                
-                // teeb p‰ringu ja kui on tıene (st et ab oli see v‰‰rtus)
-                if($stmt->fetch()){
-                    
-                    // Kasutaja email ja parool ıiged
-                    echo "Kasutaja logis sisse id=".$id_from_db;
-                    
-                }else{
-                    echo "Wrong credentials!";
-                }
-                
-                $stmt->close();
-                
-            
+                loginUser($email, $hash);
             
             }
 		} // login if end
     // *********************
     // ** LOO KASUTAJA *****
     // *********************
-    if(isset($_POST["sign_up"])){
+    if(isset($_POST["create"])){
 			if ( empty($_POST["create_email"]) ) {
-				$create_email_error = "See v‰li on kohustuslik";
+				$create_email_error = "See v√§li on kohustuslik";
 			}else{
 				$create_email = cleanInput($_POST["create_email"]);
 			}
 			if ( empty($_POST["create_password"]) ) {
-				$create_password_error = "See v‰li on kohustuslik";
+				$create_password_error = "See v√§li on kohustuslik";
 			} else {
 				if(strlen($_POST["create_password"]) < 8) {
-					$create_password_error = "Peab olema v‰hemalt 8 t‰hem‰rki pikk!";
+					$create_password_error = "Peab olema v√§hemalt 8 t√§hem√§rki pikk!";
 				}else{
 					$create_password = cleanInput($_POST["create_password"]);
 				}
-				$gender = $_POST["gender"];
-				$age = cleanInput($_POST["age"]);
-				
 			}
 			if(	$create_email_error == "" && $create_password_error == ""){
-				echo hash("sha512", $create_password);
-                echo "Vıib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
+				//echo hash("sha512", $create_password);
+                //echo "V√µib kasutajat luua! Kasutajanimi on ".$create_email." ja parool on ".$create_password;
                 
-                // tekitan paroolir‰si
+                // tekitan paroolir√§si
                 $hash = hash("sha512", $create_password);
                 
-                //salvestan andmebaasi
-                $stmt = $mysqli->prepare("INSERT INTO user_sample (email, password, age, gender) VALUES (?,?,?,?)");
-                
-                //kirjutan v‰lja error
-                //echo $stmt->error;
-                //echo $mysqli->error;
-                
-                // paneme muutujad k¸sim‰rkide asemel
-                // ss - s string, iga muutuja koht 1 t‰ht
-                $stmt->bind_param("ssis", $create_email, $hash, $age, $gender);
-                
-                //k‰ivitab sisestuse
-                $stmt->execute();
-                $stmt->close();
+                //functions.php's funktsioon
+                createUser($create_email, $hash);
                 
                 
             }
         } // create if end
 	}
-  // funktsioon, mis eemaldab kıikvıimaliku ¸leliigse tekstist
+  // funktsioon, mis eemaldab k√µikv√µimaliku √ºleliigse tekstist
   function cleanInput($data) {
   	$data = trim($data);
   	$data = stripslashes($data);
   	$data = htmlspecialchars($data);
   	return $data;
   }
-   
   
-  // paneme ¸henduse kinni
-  $mysqli->close();
-  
-?>		
-	<?php require_once("../header.php"); ?>
-		<h4>See veebileht on loodud selleks, et tellida endale omap‰rased prillid, mis sobiksid vastavalt inimese peakujuga ja oleksid sobiva hinnaga.</h4>
-		<h4>L‰hemalt tutvimiseks minge sellele lehek¸ljele : http://evoklaas.blogspot.com.ee/ </h4>
-		<h4>Facebookist leiate meid lehek¸ljelt : https://www.facebook.com/EVOGlasses?fref=ts </h4>
+?>
+<?php
+	$page_title = "Logi sisse";
+	$page_file_name = "login.php";
+
+?>
+	<?php require_once("header.php"); ?>
+		<h4>See veebileht on loodud selleks, et tellida endale omap√§rased prillid, mis sobiksid vastavalt inimese peakujuga ja oleksid sobiva hinnaga.</h4>
+		<h4>L√§hemalt tutvimiseks minge sellele lehek√ºljele : http://evoklaas.blogspot.com.ee/ </h4>
+		<h4>Facebookist leiate meid lehek√ºljelt : https://www.facebook.com/EVOGlasses?fref=ts </h4>
 		
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 				
@@ -135,21 +99,21 @@
 				<input name="password" type="password" placeholder="Password">* <?php echo $password_error; ?>	<br> <br>	
 				<input name="login" type="submit" value="log in">
 				</form>
-				<h2>Sign up</h2>
+				<h2>Tee kasutaja</h2>
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 				
 				
-				<input name="age" type="text" placeholder="age">* <br> <br>
-				<input name="create_email" type="email" placeholder="Email">*  <br><br>
-				<input name="create_password" type="text" placeholder="Password">* <br> <br>
-			Gender:
-			<input type="radio" name="gender"
-			<?php if (isset($gender) && $gender=="female") echo "checked";?>
-			value="female">Female
-			<input type="radio" name="gender"
-			<?php if (isset($gender) && $gender=="male") echo "checked";?>
-			value="male">Male	<br> <br>
+				<input name="test" type="text" placeholder="vanus">* <br> <br>
+				<input name="id_number" type="text" placeholder="Email">*  <br><br>
+				<input name="test" type="text" placeholder="parool">* <br> <br>
+			Sugu:
+			<input type="radio" name="Sugu"
+			<?php if (isset($Sugu) && $Sugu=="naine") echo "checked";?>
+			value="Naine">Naine
+			<input type="radio" name="Sugu"
+			<?php if (isset($Sugu) && $Sugu=="mees") echo "checked";?>
+			value="Mees">Mees	<br> <br>
 		
 		<input name="sign_up" type="submit" value="sign up">	
 			</form>
-	<?php require_once("../footer.php"); ?>
+	<?php require_once("footer.php"); ?>
