@@ -72,7 +72,7 @@
     
 ?>
 <?php
-	$page_title = "Lisa prillid";
+	$page_title = "Muuda andmeid";
 	$page_file_name = "data.php";
 
 ?>
