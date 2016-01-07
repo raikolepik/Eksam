@@ -1,5 +1,5 @@
 <?php
-	$page_title = "Evoglass";
+	$page_title = "Avaleht";
 	$page_file_name = "home.php";
 
 ?>

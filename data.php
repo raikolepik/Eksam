@@ -17,8 +17,10 @@
     
     
     // muutujad väärtustega
-    $prillivarv = $materjal = $m = "";
-    $prillivarv_error = $materjal_error = "";
+    $nimi = $aadress = $m = "";
+    $nimi_error = $aadress_error = "";
+	$telefon = $elektronpost = $m = "";
+    $telefon_error = $elektronpost_error = "";
     //echo $_SESSION['logged_in_user_id'];
     
     // valideerida välja ja käivita fn
@@ -78,12 +80,16 @@
 
 Tere, <?=$_SESSION['logged_in_user_email'];?> <a href="?logout=1">Logi välja</a>
 
-<h2>Lisa uued Prillid</h2>
+<h2>Muuda oma andmeid</h2>
 <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" >
-    <label for="prillivarv"> prillivarv </label>
-  	<input id="prillivarv" name="prillivarv" type="text" value="<?=$prillivarv;?>"> <?=$prillivarv_error;?><br><br>
-  	<label for="materjal"> materjal </label>
-    <input id="materjal" name="materjal" type="text" value="<?=$materjal;?>"> <?=$materjal_error;?><br><br>
+	<h3>Nimi</h3>
+  	<input id="nimi" name="nimi" type="text" value="<?=$nimi;?>"> <?=$nimi_error;?><br><br>
+	<h3>Aadress</h3>
+    <input id="aadress" name="aadress" type="text" value="<?=$aadress;?>"> <?=$aadress_error;?><br><br>
+	<h3>Telefon</h3>
+  	<input id="telefon" name="telefon" type="text" value="<?=$telefon;?>"> <?=$telefon_error;?><br><br>
+	<h3>E-post</h3>
+    <input id="elektronpost" name="elektronpost" type="text" value="<?=$elektronpost;?>"> <?=$elektronpost_error;?><br><br>
   	<input type="submit" name="add_evo_glasses" value="Lisa">
     <p style="color:green;"><?=$m;?></p>
   </form>

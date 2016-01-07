@@ -127,12 +127,12 @@
         
     }
     
-    function updateGlassData($user_id, $prillivarv, $materjal){
+    function updateGlassData($nimi, $telefon, $aadress, $elektronpost){
         
         $mysqli = new mysqli($GLOBALS["servername"], $GLOBALS["server_username"], $GLOBALS["server_password"], $GLOBALS["database"]);
         
-        $stmt = $mysqli->prepare("UPDATE evo_glasses SET prillivarv=?, materjal=? WHERE id=?");
-        $stmt->bind_param("ssi", $prillivarv, $materjal, $user_id);
+        $stmt = $mysqli->prepare("UPDATE evo_glasses SET nimi=?, aadress=?, elektronpost=?, user_id=? WHERE id=?");
+        $stmt->bind_param("ssssi", $nimi, $aadress, $telefon, $elektronpost, $user_id);
         $stmt->execute();
         
         // tühjendame aadressirea

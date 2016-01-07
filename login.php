@@ -84,20 +84,19 @@
   
 ?>
 <?php
-	$page_title = "Logi sisse";
+	$page_title = "Tere tulemast!";
 	$page_file_name = "login.php";
 
 ?>
 	<?php require_once("header.php"); ?>
-		<h4>See veebileht on loodud selleks, et tellida endale omapärased prillid, mis sobiksid vastavalt inimese peakujuga ja oleksid sobiva hinnaga.</h4>
-		<h4>Lähemalt tutvimiseks minge sellele leheküljele : http://evoklaas.blogspot.com.ee/ </h4>
-		<h4>Facebookist leiate meid leheküljelt : https://www.facebook.com/EVOGlasses?fref=ts </h4>
+		
+		<h4>Vilistlaste kontaktandmed</h4>
 		
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
 				
 				<input name="email" type="email" placeholder="Email" value="<?php echo $email; ?>">* <?php echo $email_error; ?> <br> <br> 
 				<input name="password" type="password" placeholder="Password">* <?php echo $password_error; ?>	<br> <br>	
-				<input name="login" type="submit" value="log in">
+				<input name="login" type="submit" value="logi sisse">
 				</form>
 				<h2>Tee kasutaja</h2>
 				<form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -114,6 +113,6 @@
 			<?php if (isset($Sugu) && $Sugu=="mees") echo "checked";?>
 			value="Mees">Mees	<br> <br>
 		
-		<input name="sign_up" type="submit" value="sign up">	
+		<input name="sign_up" type="submit" value="loo konto">	
 			</form>
 	<?php require_once("footer.php"); ?>

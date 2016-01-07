@@ -17,7 +17,7 @@
     //Kasutaja muudab andmeid
     if(isset($_GET["update"])){
         //auto id, auto number, auto värv
-        updateGlassData($_GET["evo_glass_id"], $_GET["prillivarv"], $_GET["materjal"]);
+        updateGlassData($_GET["evo_glass_id"], $_GET["nimi"], $_GET["aadress"], $_GET["telefon"], $_GET["elektronpost"]);
     }
     }
     $evo_glass_array = getAllData();
@@ -48,7 +48,7 @@
 
 ?>
 <?php
-	$page_title = "Prillid";
+	$page_title = "Muuda andmeid";
 	$page_file_name = "table.php";
 
 ?>
@@ -62,10 +62,10 @@
 <h1>Tabel</h1>
 <table border=1>
 <tr>
-    <th>id</th>
-    <th>kasutaja id</th>
-    <th>Prillivärv</th>
-    <th>Materjal</th>
+    <th>nimi</th>
+    <th>aadress</th>
+    <th>telefon</th>
+    <th>elektronpost</th>
     
 </tr>
 <?php 
@@ -81,8 +81,10 @@
             echo "<input type='hidden' name='evo_glass_id' value='".$evo_glass_array[$i]->id."'>";
             echo "<td>".$evo_glass_array[$i]->id."</td>";
             echo "<td>".$evo_glass_array[$i]->user_id."</td>";
-            echo "<td><input name='prillivarv' value='".$evo_glass_array[$i]->prillivarv."' ></td>";
-            echo "<td><input name='materjal' value='".$evo_glass_array[$i]->materjal."' ></td>";
+            echo "<td><input name='nimi' value='".$evo_glass_array[$i]->nimi."' ></td>";
+            echo "<td><input name='aadress' value='".$evo_glass_array[$i]->aadress."' ></td>";
+			echo "<td><input name='telefon' value='".$evo_glass_array[$i]->telefon."' ></td>";
+            echo "<td><input name='elektronpost' value='".$evo_glass_array[$i]->elektronpost."' ></td>";
             echo "<td><input name='update' type='submit'></td>";
             echo "<td><a href='table.php'>cancel</a></td>";
             echo "</form>";
